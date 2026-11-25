@@ -1,3 +1,5 @@
+import { API_URL } from './constants';
+
 export const formatPrice = (price) => {
   return new Intl.NumberFormat('es-CO', {
     style: 'currency',
@@ -29,8 +31,21 @@ export const validatePhone = (phone) => {
   return regex.test(phone);
 };
 
+// via.placeholder.com ya no existe: el placeholder va incrustado como SVG.
+const PLACEHOLDER_IMAGE =
+  'data:image/svg+xml;charset=UTF-8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">' +
+      '<rect width="400" height="300" fill="#e5e7eb"/>' +
+      '<text x="200" y="155" font-family="sans-serif" font-size="20" fill="#6b7280" text-anchor="middle">Sin imagen</text>' +
+      '</svg>'
+  );
+
+// Las imágenes locales cuelgan del mismo servidor que la API, sin el sufijo /api.
+const UPLOADS_URL = `${API_URL.replace(/\/api\/?$/, '')}/uploads`;
+
 export const getImageUrl = (imagePath) => {
-  if (!imagePath) return 'https://via.placeholder.com/400x300?text=Sin+Imagen';
+  if (!imagePath) return PLACEHOLDER_IMAGE;
   if (imagePath.startsWith('http')) return imagePath;
-  return `http://localhost:5000/uploads/${imagePath}`;
+  return `${UPLOADS_URL}/${imagePath}`;
 };

@@ -1,0 +1,22 @@
+# Instala las dependencias desde el package-lock y compila con Vite en cada
+# push y pull request: si el build se rompe, se ve aquí antes de desplegar.
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
